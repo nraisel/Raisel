@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "UploadFile";
+}
+
+<h2>Upload a File Here!!</h2>
+
+@section scripts{
+    @Scripts.Render("~/bundles/angularjs")
+    <script src="~/App/Controller/MainController.js"></script>
+    <script src="~/App/Service/UploadFileSVC.js"></script>
+}
+
+@section bootstrapAngular{
+    angular.bootstrap(document.getElementById("application"), ["appModule"]);
+}
+
+<div id="application" ng-controller="MainController">
+    <div class="container">
+        <form novalidate name="f1" ng-submit="uploadFile()">
+            <div style="color: red">{{Message}}</div>
+            <br />
+            <table class="table">
+                <tr>
+                    <td>Select File : </td>
+                    <td>
+                        <input type="file" name="file" accept="image/*" onchange="angular.element(this).scope().selectFileforUpload(this.files)" required />
+                        <span style="color: red">Max Image Dimensions (250 x 200)</span>
+                        <span class="error" ng-show="(f1.file.$dirty || IsFormSubmitted) && f1.file.$error.required">Image required!</span>
+                        <span class="error">{{FileInvalidMessage}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description : </td>
+                    <td>
+                        <input type="text" name="uFileDescription" ng-model="description" class="{{(IsFormSubmitted?'ng-dirty' + (f1.uFileDescription.$invalid?' ng-invalid':''):'')}}" autofocus />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Upload File" />
+                    </td>
+                </tr>
+            </table>
+
+            @*<h3>{{TestMessage}}</h3>
+                <h3>{{error}}</h3>
+                <input type="text" readonly name="filename" ng-model="filename" />
+                <input type="submit" value="Get File Name" />*@
+
+        </form>
+    </div>
+
+    <div class="container">
+        <input type="button" class="btn btn-primary" value="List All Files" ng-click="GetFiles()" />
+        <hr />
+        <div ng-repeat="file in files" class="row">
+            <div class="row">
+                <div class="col-xs-3">
+                    @*<img ng-src="{{file.FilePath}}" title="{{file.FileName}}" />*@
+                    <img src="~/Content/ImageFiles/reserva.png" width="250" height="200" title="reserva" />
+                </div>
+                <div class="col-xs-9">
+                    <p><span><b>File Name: </b></span><span>{{file.FileName}}</span></p>
+                    <p><span><b>Description: </b></span><span>{{file.Description}}</span></p>
+                    <p><span><b>File Size: </b></span><span>{{file.FileSize}}</span></p>
+                </div>
+            </div>
+            
+            <hr />
+        </div>
+    </div>
+</div>
